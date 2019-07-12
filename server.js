@@ -13,4 +13,6 @@ server.get('/', (req, res) => {
     res.status(200).json('hello world');
 });
 
+server.use('/auth/', authRouter);
+
 module.exports = server;
