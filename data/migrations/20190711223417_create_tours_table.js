@@ -14,6 +14,7 @@ exports.up = function(knex, Promise) {
       .notNullable()
     tbl
       .integer('user_id')
+      .notNullable()
       .references('id')
       .inTable('users');
   });

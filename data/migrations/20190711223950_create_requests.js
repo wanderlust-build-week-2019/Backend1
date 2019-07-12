@@ -11,12 +11,15 @@ exports.up = function(knex, Promise) {
       .notNullable()
     tbl
       .integer('user_id')
+      .notNullable()
       .references('id')
-      .inTable('users');
+      .inTable('users')
     tbl
       .integer('tour_id')
+      .notNullable()
       .references('id')
-      .inTable('tours');
+      .inTable('tours')
+
   });
 };
 
