@@ -11,9 +11,9 @@ module.exports = {
 //   return db('users');
 // }
 
-function add(user) {
+async function add(user) {
   return db('users')
-  .insert(user)
+  .insert(user, 'id')
   .then(ids => {
     return findById(ids[0])
   });
