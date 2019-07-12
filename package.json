@@ -2,6 +2,12 @@
   "name": "wanderlust",
   "version": "1.0.0",
   "main": "index.js",
+  "engines": {
+    "node": "8.9.x"
+  },
+  "cacheDirectories": [
+    "node_modules"
+  ],
   "scripts": {
     "start": "node index.js",
     "test": "cross-env DB_ENV=testing jest --watch --verbose",
