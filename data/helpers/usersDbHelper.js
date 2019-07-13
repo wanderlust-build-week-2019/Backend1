@@ -13,7 +13,7 @@ module.exports = {
 
 async function add(user) {
   return db('users')
-  .insert(user, 'id')
+  .insert(user, ['id'])
   .then(ids => {
     return findById(ids[0])
   });
