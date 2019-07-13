@@ -4,7 +4,7 @@ module.exports = {
   add,
   findById,
   get,
-  // findBy,
+  findBy,
 };
 
 function get() {
@@ -20,9 +20,9 @@ async function add(user) {
   });
 }
 
-// function findBy(filter) {
-//   return db('users').where(filter);
-// }
+function findBy(filter) {
+  return db('users').where(filter);
+}
 
 function findById(id) {
   return db('users')
