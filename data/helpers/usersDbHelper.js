@@ -3,13 +3,13 @@ const db = require('../dbConfig.js');
 module.exports = {
   add,
   findById,
-  // get,
+  get,
   // findBy,
 };
 
-// function get() {
-//   return db('users');
-// }
+function get() {
+  return db('users');
+}
 
 async function add(user) {
   return db('users')
