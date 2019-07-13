@@ -18,12 +18,12 @@ router.post('/guide/register', async (req, res) => {
     const newUser = await Users.add(user)
         
     // token on register so they don't have to login after
-    // const token = generateToken(newUser)
+    const token = generateToken(newUser)
 
-    // res.status(201).json({
-    //   message: `Welcome ${newUser.username}!`,
-    //   token
-    // });
+    res.status(201).json({
+      message: `Welcome ${newUser.username}!`,
+      token
+    });
 
     res.status(201).json(newUser);
   } catch (e) {
@@ -33,7 +33,7 @@ router.post('/guide/register', async (req, res) => {
   }
 });
 
-router.post('/patron/register', (req, res) => {
+router.post('/user/register', (req, res) => {
 
 });
 
