@@ -31,7 +31,7 @@ router.get('/:id', async(req, res) => {
         } else {
             res
                 .status(404)
-                .json('This tour is not available.');
+                .json('The tour could not be found');
         }
     } catch (err) {
         res
@@ -75,7 +75,7 @@ router.put('/:id', async(req, res) => {
         } else {
             res
                 .status(404)
-                .json('This tour is no longer available.');
+                .json("The tour with the specified ID does not exist.");
         }
     } catch (err) {
         res
@@ -97,7 +97,7 @@ router.delete('/:id', async(req, res) => {
         } else {
             res
                 .status(404)
-                .json('This tour is no longer available.');
+                .json('The tour could not be found');
         }
     } catch (err) {
         res
