@@ -63,10 +63,11 @@ router.post('/', async(req, res) => {
 
 router.put('/:id', async(req, res) => {
     const id = req.params.id;
+
     const updatedTour = req.body;
 
     try {
-        const tour = await Tours.updatedTour(id, updatedTour);
+        const tour = await Tours.updateTour(id, updatedTour);
         console.log(tour);
         if (tour) {
             res
