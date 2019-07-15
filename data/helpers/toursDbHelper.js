@@ -6,7 +6,7 @@ module.exports = {
     updateTour,
     findBy,
     findById,
-    removeTour
+    remove
 };
 
 function get() {
@@ -40,6 +40,6 @@ function findById(id) {
         .first();
 };
 
-async function removeTour(id) {
+async function remove(id) {
     return db('tours').where({ id }).del();
 }

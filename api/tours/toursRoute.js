@@ -31,7 +31,7 @@ router.get('/:id', async(req, res) => {
         } else {
             res
                 .status(404)
-                .json('This tour is not available.');
+                .json('The tour could not be found');
         }
     } catch (err) {
         res
@@ -63,10 +63,11 @@ router.post('/', async(req, res) => {
 
 router.put('/:id', async(req, res) => {
     const id = req.params.id;
+
     const updatedTour = req.body;
 
     try {
-        const tour = await Tours.updatedTour(id, updatedTour);
+        const tour = await Tours.updateTour(id, updatedTour);
         console.log(tour);
         if (tour) {
             res
@@ -75,7 +76,7 @@ router.put('/:id', async(req, res) => {
         } else {
             res
                 .status(404)
-                .json('This tour is no longer available.');
+                .json("The tour with the specified ID does not exist.");
         }
     } catch (err) {
         res
@@ -97,7 +98,7 @@ router.delete('/:id', async(req, res) => {
         } else {
             res
                 .status(404)
-                .json('This tour is no longer available.');
+                .json('The tour could not be found');
         }
     } catch (err) {
         res
