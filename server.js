@@ -8,6 +8,7 @@ server.use(express.json(), cors(), helmet());
 const authRouter = require('./auth/authRouter.js');
 const usersRouter = require('./api/users/usersRoute.js');
 const toursRouter = require('./api/tours/toursRoute.js');
+const requestsRouter = require('./api/requests/requestsRoute.js');
 
 server.get('/', (req, res) => {
     res.status(200).json('hello world');
@@ -16,5 +17,6 @@ server.get('/', (req, res) => {
 server.use('/auth/', authRouter);
 server.use('/api/users', usersRouter);
 server.use('/api/tours', toursRouter);
+server.use('/api/requests', requestsRouter);
 
 module.exports = server;
