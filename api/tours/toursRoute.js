@@ -4,19 +4,13 @@ const Tours = require('./../../data/helpers/toursDbHelper');
 router.get('/', async(req, res) => {
     try {
         const tours = await Tours.get();
-        if (tours) {
-            res
-                .status(200)
-                .json(tours);
-        } else {
-            res
-                .status(4040)
-                .json('No tours available.');
-        }
+        res.status(200).json(tours);
     } catch (err) {
         res
             .status(500)
-            .json(err);
+            .json({
+                message: 'Error retrieving the tours',
+              });
     };
 });
 
@@ -36,28 +30,30 @@ router.get('/:id', async(req, res) => {
     } catch (err) {
         res
             .status(500)
-            .json(err);
+            .json({
+                message: 'Error retrieving the tour',
+              });
     }
 });
 
 router.post('/', async(req, res) => {
+    // this will need to use req.userId
     const newTour = req.body;
+
+    if (!newTour.type || !newTour.location || !newTour.max_duration) {
+        return res.status(400).json({ message: 'Need type, location, max duration' });
+    }
+
     try {
         const tour = await Tours.add(newTour);
 
-        if (tour) {
-            res
-                .status(201)
-                .json(tour);
-        } else {
-            res
-                .status(401)
-                .json('All fields are required.');
-        }
+        res.status(201).json(tour);
     } catch (err) {
         res
             .status(500)
-            .json(err);
+            .json({
+                message: 'Error adding the tour',
+              });
     }
 });
 
@@ -89,7 +85,7 @@ router.put('/:id', async(req, res) => {
 router.delete('/:id', async(req, res) => {
     const id = req.params.id;
     try {
-        const tour = await Tours.remove(id);
+        const tour = await Tours.remove(id);    
 
         if (tour) {
             res
@@ -103,7 +99,9 @@ router.delete('/:id', async(req, res) => {
     } catch (err) {
         res
             .status(500)
-            .json(err);
+            .json({
+                message: 'Error removing the tour',
+              });
     }
 });
 
