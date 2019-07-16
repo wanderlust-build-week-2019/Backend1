@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const Requests = require('./../../data/helpers/requestsDbHelper.js');
+const restricted = require('../../auth/restrictedMiddleware.js');
+const authorization = require('../../auth/userMiddleware.js');
 
 router.get('/', async(req, res) => {
     try {
@@ -40,7 +42,7 @@ router.get('/:id', async(req, res) => {
     }
 });
 
-router.post('/', async(req, res) => {
+router.post('/', restricted, authorization, async(req, res) => {
     const newRequest = req.body;
     try {
         const request = await Requests.add(newRequest);
@@ -61,7 +63,7 @@ router.post('/', async(req, res) => {
     }
 });
 
-router.put('/:id', async(req, res) => {
+router.put('/:id', restricted, authorization, async(req, res) => {
     const id = req.params.id;
 
     const updatedRequest = req.body;
@@ -84,7 +86,7 @@ router.put('/:id', async(req, res) => {
     };
 });
 
-router.delete('/:id', async(req, res) => {
+router.delete('/:id', restricted, authorization, async(req, res) => {
     const id = req.params.id;
     try {
         const request = await Requests.remove(id);
