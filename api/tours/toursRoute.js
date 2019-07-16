@@ -1,5 +1,7 @@
 const router = require('express').Router();
-const Tours = require('./../../data/helpers/toursDbHelper');
+const Tours = require('./../../data/helpers/toursDbHelper.js');
+const restricted = require('../../auth/restrictedMiddleware.js');
+const authorization = require('../../auth/tourGuideMiddleware.js');
 
 router.get('/', async(req, res) => {
     try {
@@ -10,7 +12,7 @@ router.get('/', async(req, res) => {
                 .json(tours);
         } else {
             res
-                .status(4040)
+                .status(404)
                 .json('No tours available.');
         }
     } catch (err) {
@@ -40,7 +42,7 @@ router.get('/:id', async(req, res) => {
     }
 });
 
-router.post('/', async(req, res) => {
+router.post('/', restricted, authorization, async(req, res) => {
     const newTour = req.body;
     try {
         const tour = await Tours.add(newTour);
@@ -61,7 +63,7 @@ router.post('/', async(req, res) => {
     }
 });
 
-router.put('/:id', async(req, res) => {
+router.put('/:id', restricted, authorization, async(req, res) => {
     const id = req.params.id;
 
     const updatedTour = req.body;
@@ -86,7 +88,7 @@ router.put('/:id', async(req, res) => {
 
 });
 
-router.delete('/:id', async(req, res) => {
+router.delete('/:id', restricted, authorization, async(req, res) => {
     const id = req.params.id;
     try {
         const tour = await Tours.remove(id);
