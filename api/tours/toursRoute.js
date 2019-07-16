@@ -59,14 +59,13 @@ router.post('/', restricted, authorization, async(req, res) => {
     }
 });
 
-router.put('/:id', restricted, authorization, async(req, res) => {
+router.put('/:id', restricted, authorization, validateAbility, async(req, res) => {
     const id = req.params.id;
-
+    
     const updatedTour = req.body;
 
     try {
         const tour = await Tours.updateTour(id, updatedTour);
-        console.log(tour);
         if (tour) {
             res
                 .status(200)
@@ -84,7 +83,7 @@ router.put('/:id', restricted, authorization, async(req, res) => {
 
 });
 
-router.delete('/:id', restricted, authorization, async(req, res) => {
+router.delete('/:id', restricted, authorization, validateAbility, async(req, res) => {
     const id = req.params.id;
     try {
         const tour = await Tours.remove(id);    
@@ -106,5 +105,20 @@ router.delete('/:id', restricted, authorization, async(req, res) => {
               });
     }
 });
+
+// prevents a guide from updating/deleting a tour they dont own
+async function validateAbility(req, res, next) {    
+    try {
+      const tour = await Tours.findById(req.params.id);
+    
+      if (tour.user_id === req.userId) {
+        next()
+      } else {
+        res.status(403).json({ message: 'this is not your tour' });
+      }    
+      } catch (err) {
+        res.status(500).json({ message: 'failed to process request' });    
+      }
+  };
 
 module.exports = router;
