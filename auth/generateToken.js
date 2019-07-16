@@ -3,12 +3,12 @@ const secret = require('./../config/credentials').jwtSecret;
 
 function generateToken(user) {
     const payload = {
-      subject: user.id,
+      userId: user.id,
       // username: user.username,
       userRole: user.role_id
     }
     const options = {
-      expiresIn: '1d',
+      expiresIn: '7d',
     }
     return jwt.sign(payload, secret, options)
 }
