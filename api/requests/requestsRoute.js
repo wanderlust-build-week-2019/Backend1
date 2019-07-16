@@ -42,24 +42,23 @@ router.get('/:id', async(req, res) => {
     }
 });
 
-router.post('/', restricted, authorization, async(req, res) => {
-    const newRequest = req.body;
+router.post('/', restricted, authorization, async(req, res) => {    
+    const newRequest = { ...req.body, user_id: req.userId };
+
+    if (newRequest.is_private === undefined || !newRequest.duration || !newRequest.tour_id) {
+        return res.status(400).json({ message: 'Need privacy setting, duration, tour id' });
+    }
+
     try {
         const request = await Requests.add(newRequest);
 
-        if (request) {
-            res
-                .status(201)
-                .json(request);
-        } else {
-            res
-                .status(401)
-                .json('All fields are required.');
-        }
+        res.status(201).json(request);
     } catch (err) {
         res
             .status(500)
-            .json(err);
+            .json({
+                message: 'Error adding the request',
+              });
     }
 });
 
