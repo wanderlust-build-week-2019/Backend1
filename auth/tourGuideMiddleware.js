@@ -3,6 +3,7 @@ const authorization = (req, res, next) => {
     const token = req.decodedJwt;
 
     if (token.userRole === 1) {
+        req.userId = token.userId
         next();
     } else {
         res

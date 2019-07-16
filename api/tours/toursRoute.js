@@ -39,9 +39,8 @@ router.get('/:id', async(req, res) => {
 });
 
 router.post('/', restricted, authorization, async(req, res) => {
-
-    // this will need to use req.userId
-    const newTour = req.body;
+    
+    const newTour = { ...req.body, user_id: req.userId };
 
     if (!newTour.type || !newTour.location || !newTour.max_duration) {
         return res.status(400).json({ message: 'Need type, location, max duration' });
