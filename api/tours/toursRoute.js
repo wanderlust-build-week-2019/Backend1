@@ -1,5 +1,7 @@
 const router = require('express').Router();
-const Tours = require('./../../data/helpers/toursDbHelper');
+const Tours = require('./../../data/helpers/toursDbHelper.js');
+const restricted = require('../../auth/restrictedMiddleware.js');
+const authorization = require('../../auth/tourGuideMiddleware.js');
 
 router.get('/', async(req, res) => {
     try {
@@ -36,7 +38,8 @@ router.get('/:id', async(req, res) => {
     }
 });
 
-router.post('/', async(req, res) => {
+router.post('/', restricted, authorization, async(req, res) => {
+
     // this will need to use req.userId
     const newTour = req.body;
 
@@ -57,7 +60,7 @@ router.post('/', async(req, res) => {
     }
 });
 
-router.put('/:id', async(req, res) => {
+router.put('/:id', restricted, authorization, async(req, res) => {
     const id = req.params.id;
 
     const updatedTour = req.body;
@@ -82,7 +85,7 @@ router.put('/:id', async(req, res) => {
 
 });
 
-router.delete('/:id', async(req, res) => {
+router.delete('/:id', restricted, authorization, async(req, res) => {
     const id = req.params.id;
     try {
         const tour = await Tours.remove(id);    
