@@ -89,7 +89,7 @@ router.put('/:id', restricted, authorization, validateAbility, async(req, res) =
     };
 });
 
-router.delete('/:id', restricted, authorization, async(req, res) => {
+router.delete('/:id', restricted, authorization, validateAbility, async(req, res) => {
     const id = req.params.id;
     try {
         const request = await Requests.remove(id);
@@ -97,16 +97,18 @@ router.delete('/:id', restricted, authorization, async(req, res) => {
         if (request) {
             res
                 .status(200)
-                .json('Request was removed');
+                .json({ message: 'Request was removed'});
         } else {
             res
                 .status(404)
-                .json('The request could not be found');
+                .json({message: 'The request could not be found'});
         }
     } catch (err) {
         res
             .status(500)
-            .json(err);
+            .json({
+                message: 'Error removing the request',
+              });
     }
 });
 
@@ -119,6 +121,7 @@ async function validateAbility(req, res, next) {
       } else {
         res.status(403).json({ message: 'this is not your request' });
       }    
+     // this is firing on 404 findbyId
       } catch (err) {
         res.status(500).json({ message: 'failed to process' });    
       }
