@@ -40,7 +40,8 @@ describe('server.js', () => {
   })
 
   describe('post /tours', () => {
-
+    
+    // doesnt work
   xit('responds with 201 when post', async function() {
     const user = {
         username: 'bob',
@@ -65,6 +66,50 @@ describe('server.js', () => {
     expect(res.body.location).toBe('myrtle beach')
 
   });
+  })
+
+  // these tests only work when validateAbility middleware is taken off
+  // the endpoint
+  describe('delete /tours/:id', () => {
+    
+    xit('should show correct message when user is removed', async () => {
+      let tour = {type: 'adventure', location: 'miami', max_duration: 3, user_id: 1 }
+      const user = {
+        username: 'bob',
+        role_id: 1,
+        user_id: 1
+    }
+    const token = generateToken(user);    
+
+    await db('tours').insert(tour);
+
+    const res = await request(server)
+        .del('/api/tours/1')
+        .send(tour)
+        .set('Accept', 'application/json')
+        .set('Authorization', token);   
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual('Tour was removed');
+    }); 
+    
+    xit('should show correct message when tour doesnt exist', async () => {
+      const user = {
+        username: 'bob',
+        role_id: 1,
+        user_id: 1
+    }
+    const token = generateToken(user);    
+
+      const res = await request(server)
+        .del('/api/tours/3')
+        .set('Accept', 'application/json')
+        .set('Authorization', token);         
+
+      expect(res.status).toBe(404);
+      expect(res.body).toEqual('The tour could not be found');
+    }); 
+
   })
 
 })
