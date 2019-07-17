@@ -27,7 +27,7 @@ router.get('/:id', async(req, res) => {
         } else {
             res
                 .status(404)
-                .json('The tour could not be found');
+                .json({message: 'The tour could not be found'});
         }
     } catch (err) {
         res
@@ -73,7 +73,7 @@ router.put('/:id', restricted, authorization, validateAbility, async(req, res) =
         } else {
             res
                 .status(404)
-                .json("The tour with the specified ID does not exist.");
+                .json({message: "The tour with the specified ID does not exist."});
         }
     } catch (err) {
         res
@@ -91,11 +91,11 @@ router.delete('/:id', restricted, authorization, validateAbility, async(req, res
         if (tour) {
             res
                 .status(200)
-                .json('Tour was removed');
+                .json({ message: 'Tour was removed'});
         } else {
             res
                 .status(404)
-                .json('The tour could not be found');
+                .json({message: 'The tour could not be found'});
         }
     } catch (err) {
         res

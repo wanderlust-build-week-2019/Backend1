@@ -107,7 +107,7 @@ describe('server.js', () => {
         .set('Authorization', token);         
 
       expect(res.status).toBe(404);
-      expect(res.body).toEqual('The tour could not be found');
+      expect(res.body).toEqual({message: 'The tour could not be found'});
     }); 
 
   })
