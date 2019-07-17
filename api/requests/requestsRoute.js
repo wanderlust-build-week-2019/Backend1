@@ -6,19 +6,13 @@ const authorization = require('../../auth/userMiddleware.js');
 router.get('/', async(req, res) => {
     try {
         const requests = await Requests.get();
-        if (requests) {
-            res
-                .status(200)
-                .json(requests);
-        } else {
-            res
-                .status(404)
-                .json('No requests available.');
-        }
+        res.status(200).json(requests);
     } catch (err) {
         res
             .status(500)
-            .json(err);
+            .json({
+                message: 'Error retrieving the requests',
+              });
     };
 });
 
