@@ -64,6 +64,10 @@ router.put('/:id', restricted, authorization, validateAbility, async(req, res) =
     
     const updatedTour = req.body;
 
+    if (Object.keys(updatedTour).length === 0){
+        res.status(400).json({message: "missing data"});
+      }
+
     try {
         const tour = await Tours.updateTour(id, updatedTour);
         if (tour) {
@@ -78,7 +82,7 @@ router.put('/:id', restricted, authorization, validateAbility, async(req, res) =
     } catch (err) {
         res
             .status(500)
-            .json(err);
+            .json({message: "The tour information could not be modified."});
     };
 
 });
