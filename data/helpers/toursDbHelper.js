@@ -6,7 +6,8 @@ module.exports = {
     updateTour,
     findBy,
     findById,
-    remove
+    remove,
+    getTourRequests
 };
 
 function get() {
@@ -35,11 +36,29 @@ async function findBy(filter) {
 }
 
 function findById(id) {
-    return db('tours')
-        .where({id})
-        .first();
+  let query = db('tours').where({id}).first();
+
+  const promises = [query, this.getTourRequests(id)]; // [ tour, request ]
+
+  return Promise.all(promises).then(function(results) {
+    
+    let [tour, requests] = results;
+
+    if (tour) {
+      tour.requests = requests;
+
+      return tour
+    } else {
+      return undefined;
+    }
+  });
 };
 
 async function remove(id) {
     return db('tours').where({ id }).del();
+}
+
+function getTourRequests(tourId) {
+  return db('requests')
+    .where('tour_id', tourId)
 }
