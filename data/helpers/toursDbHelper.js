@@ -18,7 +18,7 @@ async function add(tour) {
     return db('tours')
         .insert(tour)
         .then(ids => {
-            return findById(ids[0]);
+            return findByIdPlain(ids[0]);
         });
 };
 
@@ -27,12 +27,16 @@ async function updateTour(id, changes) {
         .where({id})
         .update(changes)
         .then(function() {
-            return findById(id)
+            return findByIdPlain(id)
         });
 }
 
 async function findBy(filter) {
     return db('tours').where(filter);
+}
+
+function findByIdPlain(id) {
+    return db('tours').where({id}).first();
 }
 
 function findById(id) {
