@@ -7,6 +7,7 @@ const request = require('supertest');
 describe('server.js', () => {
   afterEach( async () => {
     await db('tours').truncate();
+    await db('requests').truncate();
   });
 
   describe('get /tours', () => {
@@ -21,6 +22,7 @@ describe('server.js', () => {
       expect(res.body).toEqual(tours);
     }); 
   })
+
   describe('get /tours/:id', () => {
     it('should return the first tour from the db', async () => {
       let tour = {
@@ -28,14 +30,23 @@ describe('server.js', () => {
         type: "sight seeing",
         location: "myrtle beach",
         max_duration: 3,
-        user_id: 1
-        }
+        user_id: 1,
+      }
 
-        await db('tours').insert(tour);      
+      let req = {
+        is_private: 0,
+        duration: 2,
+        user_id: 2,
+        tour_id: 1
+      }
+      
+      await db('tours').insert(tour);      
+      await db('requests').insert(req);      
 
       const response = await request(server).get('/api/tours/1');
 
-      expect(response.body).toEqual(tour);
+      expect(response.body.type).toEqual("sight seeing");
+      expect(response.body.requests[0].is_private).toEqual(0);
     }); 
   })
 
