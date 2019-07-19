@@ -5,5 +5,6 @@ exports.seed = function(knex, Promise) {
   return knex('tours').insert([
     { type: 'sight seeing', location: 'myrtle beach', max_duration: 3, user_id: 1 },
     { type: 'adventure', location: 'miami', max_duration: 3, user_id: 1 },
+    { type: 'adventure', location: 'detroit', max_duration: 2, user_id: 3 },
   ]);
 };
