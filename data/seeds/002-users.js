@@ -10,6 +10,7 @@ exports.seed = function(knex, Promise) {
   return knex('users').insert([
     { username: 'guide', password: hash, role_id: 1 },
     { username: 'user', password: hash, role_id: 2 },
-    { username: 'adam', password: hash, role_id: 2 },
+    { username: 'adam', password: hash, role_id: 1 },
+    { username: 'bob', password: hash, role_id: 2 },
   ]);
 };
