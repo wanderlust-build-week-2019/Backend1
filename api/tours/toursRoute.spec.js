@@ -104,6 +104,7 @@ describe('server.js', () => {
       expect(res.body).toEqual('Tour was removed');
     }); 
     
+    // test only works when validateAbility middleware is taken off
     xit('should show correct message when tour doesnt exist', async () => {
       const user = {
         username: 'bob',
@@ -124,7 +125,7 @@ describe('server.js', () => {
   })
 
   describe('update /tours/:id', () => {
-    
+    // test only works when validateAbility middleware is taken off    
     xit('should show return updated info when updated', async () => {
       let tour = {type: 'adventure', location: 'miami', max_duration: 3, user_id: 1 }
       const user = {
