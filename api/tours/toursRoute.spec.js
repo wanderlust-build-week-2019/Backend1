@@ -101,7 +101,7 @@ describe('server.js', () => {
         .set('Authorization', token);   
 
       expect(res.status).toBe(200);
-      expect(res.body).toEqual('Tour was removed');
+      expect(res.body).toEqual({ message: 'Tour was removed'});
     }); 
     
     // test only works when validateAbility middleware is taken off
