@@ -114,8 +114,10 @@ router.delete('/:id', restricted, authorization, validateAbility, async(req, res
 async function validateAbility(req, res, next) {    
     try {
       const tour = await Tours.findById(req.params.id);
-    
-      if (tour.user_id === req.userId) {
+
+      if (!tour) {
+        res.status(404).json({message: 'The tour could not be found'});
+      } else if (tour.user_id === req.userId) {
         next()
       } else {
         res.status(403).json({ message: 'this is not your tour' });
