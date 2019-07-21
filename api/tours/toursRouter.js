@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const Tours = require('./../../data/helpers/toursDbHelper.js');
 const restricted = require('../../auth/restrictedMiddleware.js');
-const authorization = require('../../auth/tourGuideMiddleware.js');
+const {authorization, validateAbility, validateTourId} = require('../../auth/tourGuideMiddleware.js');
 
 router.get('/', async(req, res) => {
     try {
@@ -16,26 +16,8 @@ router.get('/', async(req, res) => {
     };
 });
 
-router.get('/:id', async(req, res) => {
-    const id = req.params.id;
-    try {
-        const tour = await Tours.findById(id);
-        if (tour) {
-            res
-                .status(200)
-                .json(tour);
-        } else {
-            res
-                .status(404)
-                .json({message: 'The tour does not exist'});
-        }
-    } catch (err) {
-        res
-            .status(500)
-            .json({
-                message: 'Error retrieving the tour',
-              });
-    }
+router.get('/:id', validateTourId, async(req, res) => {    
+    res.status(200).json(req.tour);  
 });
 
 router.post('/', restricted, authorization, async(req, res) => {
@@ -59,7 +41,7 @@ router.post('/', restricted, authorization, async(req, res) => {
     }
 });
 
-router.put('/:id', restricted, authorization, validateAbility, async(req, res) => {
+router.put('/:id', restricted, authorization, validateTourId, validateAbility, async(req, res) => {
     const id = req.params.id;
     
     const updatedTour = req.body;
@@ -70,15 +52,7 @@ router.put('/:id', restricted, authorization, validateAbility, async(req, res) =
 
     try {
         const tour = await Tours.updateTour(id, updatedTour);
-        if (tour) {
-            res
-                .status(200)
-                .json({tour, message: 'Tour was successfully updated.'});
-        } else {
-            res
-                .status(404)
-                .json({message: "The tour does not exist."});
-        }
+        res.status(200).json({tour, message: 'Tour was successfully updated.'});
     } catch (err) {
         res
             .status(500)
@@ -87,20 +61,12 @@ router.put('/:id', restricted, authorization, validateAbility, async(req, res) =
 
 });
 
-router.delete('/:id', restricted, authorization, validateAbility, async(req, res) => {
+router.delete('/:id', restricted, authorization, validateTourId, validateAbility, async(req, res) => {
     const id = req.params.id;
     try {
-        const tour = await Tours.remove(id);    
-
-        if (tour) {
-            res
-                .status(200)
-                .json({ message: 'Tour was removed'});
-        } else {
-            res
-                .status(404)
-                .json({message: 'The tour does not exist'});
-        }
+        await Tours.remove(id);    
+        
+        res.status(200).json({ message: 'Tour was removed'});
     } catch (err) {
         res
             .status(500)
@@ -109,22 +75,5 @@ router.delete('/:id', restricted, authorization, validateAbility, async(req, res
               });
     }
 });
-
-// prevents a guide from updating/deleting a tour they dont own
-async function validateAbility(req, res, next) {    
-    try {
-      const tour = await Tours.findById(req.params.id);
-
-      if (!tour) {
-        res.status(404).json({message: 'The tour does not exist'});
-      } else if (tour.user_id === req.userId) {
-        next()
-      } else {
-        res.status(403).json({ message: 'this is not your tour' });
-      }    
-      } catch (err) {
-        res.status(500).json({ message: 'failed to process request' });    
-      }
-  };
 
 module.exports = router;
