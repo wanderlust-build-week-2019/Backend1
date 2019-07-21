@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const Tours = require('./../../data/helpers/toursDbHelper.js');
 const restricted = require('../../auth/restrictedMiddleware.js');
-const authorization = require('../../auth/tourGuideMiddleware.js');
+const {authorization, validateAbility, validateTourId} = require('../../auth/tourGuideMiddleware.js');
 
 router.get('/', async(req, res) => {
     try {
@@ -16,7 +16,7 @@ router.get('/', async(req, res) => {
     };
 });
 
-router.get('/:id', validateTourId, async(req, res) => {
+router.get('/:id', validateTourId, async(req, res) => {    
     res.status(200).json(req.tour);  
 });
 
@@ -75,31 +75,5 @@ router.delete('/:id', restricted, authorization, validateTourId, validateAbility
               });
     }
 });
-
-async function validateTourId(req, res, next) {
-
-    try {
-    const tour = await Tours.findById(req.params.id);
-  
-    if (tour) {
-      req.tour = tour
-      next()
-    } else {
-      res.status(404).json({ message: 'The tour does not exist' });
-    }    
-    } catch (err) {
-      res.status(500).json({ message: 'failed to process request' });    
-    }
-  };
-
-// prevents a guide from updating/deleting a tour they dont own
-async function validateAbility(req, res, next) {    
-
-    if (req.tour.user_id === req.userId) {
-        next()
-    } else {
-        res.status(403).json({ message: 'this is not your tour' });
-    }    
-  };
 
 module.exports = router;
