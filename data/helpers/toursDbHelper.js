@@ -16,6 +16,7 @@ function get() {
 
 async function add(tour) {
     return db('tours')
+        .returning('id')
         .insert(tour)
         .then(ids => {
             return findByIdPlain(ids[0]);
