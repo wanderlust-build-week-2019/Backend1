@@ -13,7 +13,7 @@ function get() {
 
 async function add(user) {
   return db('users')
-  // .returning('id')
+  .returning('id')
   .insert(user)
   .then(ids => {
     return findById(ids[0])
